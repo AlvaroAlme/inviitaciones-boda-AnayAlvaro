@@ -1,20 +1,12 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Carousel from "./components/Carousel";
 import InfoSection from "./components/InfoSection";
-import RSVPForm from "./components/RSVPForm";
 import "./App.css";
 
 export default function App() {
-  const infoRef = useRef(null);
-  const formRef = useRef(null);
   const [showForm, setShowForm] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const goToInfo = () => infoRef.current?.scrollIntoView({ behavior: "smooth" });
-  const revealForm = () => {
-    setShowForm(true);
-    setTimeout(() => formRef.current?.scrollIntoView({ behavior: "smooth" }), 300);
-  };
   const handleSubmit = () => setSubmitted(true);
 
   return (
@@ -29,51 +21,32 @@ export default function App() {
           <p className="text-4xl font-serif-title text-camo drop-shadow-lg mb-10 select-none">
             03 · Octubre · 2025
           </p>
+          {/* Botón que baja a la info */}
           <button
-            onClick={goToInfo}
+            onClick={() => {
+              document
+                .getElementById("info-section")
+                ?.scrollIntoView({ behavior: "smooth" });
+            }}
             className="bg-sage hover:bg-sand text-cream px-12 py-5 rounded-full text-2xl shadow-lg transition font-semibold"
           >
-            ¡Acompáñanos en nuestro dia!
+            ¡Acompáñanos en nuestro día!
           </button>
         </div>
       </section>
 
-      {/* INFO + BUTTON */}
+      {/* INFO + FORMULARIO */}
       <section
-        ref={infoRef}
+        id="info-section"
         className="w-full flex flex-col items-center py-32 px-6 gap-20 bg-white/90 backdrop-blur-sm"
       >
-        <InfoSection />
-        <button
-          onClick={revealForm}
-          className="bg-sage hover:bg-sand text-cream px-12 py-5 rounded-full text-2xl shadow-lg transition font-semibold mt-16"
-        >
-          ¡Rellena el formulario!
-        </button>
+        <InfoSection
+          showForm={showForm}
+          setShowForm={setShowForm}
+          submitted={submitted}
+          onSubmit={handleSubmit}
+        />
       </section>
-
-      {/* FORMULARIO */}
-      {showForm && (
-        <section
-          ref={formRef}
-          className="w-full flex flex-col items-center py-32 px-6 bg-white/90 backdrop-blur-sm"
-        >
-          <div className="w-full max-w-md mx-auto bg-cream p-12 rounded-lg shadow-xl">
-            {submitted ? (
-              <p className="text-center text-2xl font-serif-title text-sage">
-                ¡Gracias por confirmar tu asistencia! Nos vemos muy pronto.
-              </p>
-            ) : (
-              <>
-                <h2 className="text-4xl font-serif-title font-bold text-center text-sage mb-12">
-                  Confirma tu asistencia
-                </h2>
-                <RSVPForm onSubmit={handleSubmit} btnClass="bg-sage hover:bg-sand text-cream" />
-              </>
-            )}
-          </div>
-        </section>
-      )}
 
       <footer className="w-full text-center py-10 text-sm text-sage">
         &copy; 2025 Ana & Álvaro · Con ❤️ y muchas ganas de celebrar.

@@ -46,33 +46,34 @@ export default function RSVPForm() {
     if (Object.keys(v).length) return setErrors(v);
     setErrors({});
 
-   const { data, error } = await supabase
-  .from("form_boda")
-  .insert([
-    {
-      nombre: form.name,
-      attending: form.attending,
-      need_bus: form.needBus,
-      bus_option: form.busOption,
-      num_plazas: form.numPlazas,
-      alergias: form.allergies,
+    const { data, error } = await supabase
+      .from("form_boda")
+      .insert([
+        {
+          nombre: form.name,
+          attending: form.attending,
+          need_bus: form.needBus,
+          bus_option: form.busOption,
+          num_plazas: form.numPlazas,
+          alergias: form.allergies,
+        },
+      ]);
+
+    if (error) {
+      console.error("Error al guardar:", error);
+      alert("Error al enviar el formulario: " + JSON.stringify(error, null, 2));
+      return;
     }
-  ]);
 
-if (error) {
-  console.error("Error al guardar:", error);
-  alert("Error al enviar el formulario: " + JSON.stringify(error, null, 2));
-  return;
-}
-
-
-alert("¡Gracias! Tu respuesta se ha registrado.");
-
+    alert("¡Gracias! Tu respuesta se ha registrado.");
   };
 
   /* ────────── RENDER ────────── */
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-white p-6 rounded-lg shadow space-y-4">
+    <form
+      onSubmit={handleSubmit}
+      className="w-full max-w-3xl mx-auto bg-white p-8 rounded-lg shadow space-y-6"
+    >
       {/* Nombre -------------------------------- */}
       <div>
         <input
@@ -80,7 +81,7 @@ alert("¡Gracias! Tu respuesta se ha registrado.");
           placeholder="Nombre y apellidos"
           value={form.name}
           onChange={handleChange}
-          className="w-full p-2 border rounded"
+          className="w-full p-3 border rounded"
         />
         {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
       </div>
@@ -89,12 +90,21 @@ alert("¡Gracias! Tu respuesta se ha registrado.");
       <div>
         <p className="font-semibold mb-1">¿Asistirás a la boda?</p>
         {["si", "no"].map((v) => (
-          <label key={v} className="mr-4">
-            <input type="radio" name="attending" value={v} checked={form.attending === v} onChange={handleChange} />{" "}
+          <label key={v} className="mr-6 cursor-pointer">
+            <input
+              type="radio"
+              name="attending"
+              value={v}
+              checked={form.attending === v}
+              onChange={handleChange}
+              className="mr-1"
+            />
             {v === "si" ? "Sí" : "No"}
           </label>
         ))}
-        {errors.attending && <p className="text-red-500 text-sm">{errors.attending}</p>}
+        {errors.attending && (
+          <p className="text-red-500 text-sm">{errors.attending}</p>
+        )}
       </div>
 
       {/* Pregunta bus (solo si asiste) ---------- */}
@@ -102,19 +112,27 @@ alert("¡Gracias! Tu respuesta se ha registrado.");
         <div>
           <p className="font-semibold mb-1">¿Necesitas autobús para desplazarte?</p>
           {["si", "no"].map((v) => (
-            <label key={v} className="mr-4">
-              <input type="radio" name="needBus" value={v} checked={form.needBus === v} onChange={handleChange} />{" "}
+            <label key={v} className="mr-6 cursor-pointer">
+              <input
+                type="radio"
+                name="needBus"
+                value={v}
+                checked={form.needBus === v}
+                onChange={handleChange}
+                className="mr-1"
+              />
               {v === "si" ? "Sí" : "No"}
             </label>
           ))}
-          {errors.needBus && <p className="text-red-500 text-sm">{errors.needBus}</p>}
+          {errors.needBus && (
+            <p className="text-red-500 text-sm">{errors.needBus}</p>
+          )}
         </div>
       )}
 
       {/* Opciones bus (solo si necesita bus) ---- */}
       {form.needBus === "si" && (
         <>
-          
           {/* Radios bus */}
           <div>
             <p className="font-semibold mb-1">Selecciona autobús:</p>
@@ -123,11 +141,21 @@ alert("¡Gracias! Tu respuesta se ha registrado.");
               { v: "vuelta00", t: "Solo vuelta (Magna Garden → Hotel JC1 • 00:30 / 04:30)" },
               { v: "idaVuelta00", t: "Ida y vuelta" },
             ].map((o) => (
-              <label key={o.v} className="block">
-                <input type="radio" name="busOption" value={o.v} checked={form.busOption === o.v} onChange={handleChange} /> {o.t}
+              <label key={o.v} className="block cursor-pointer">
+                <input
+                  type="radio"
+                  name="busOption"
+                  value={o.v}
+                  checked={form.busOption === o.v}
+                  onChange={handleChange}
+                  className="mr-2"
+                />
+                {o.t}
               </label>
             ))}
-            {errors.busOption && <p className="text-red-500 text-sm">{errors.busOption}</p>}
+            {errors.busOption && (
+              <p className="text-red-500 text-sm">{errors.busOption}</p>
+            )}
           </div>
 
           <div>
@@ -140,9 +168,11 @@ alert("¡Gracias! Tu respuesta se ha registrado.");
               max="5"
               value={form.numPlazas}
               onChange={handleChange}
-              className="w-full p-2 border rounded"
+              className="w-full p-3 border rounded"
             />
-            {errors.numPlazas && <p className="text-red-500 text-sm">{errors.numPlazas}</p>}
+            {errors.numPlazas && (
+              <p className="text-red-500 text-sm">{errors.numPlazas}</p>
+            )}
           </div>
         </>
       )}
@@ -154,13 +184,17 @@ alert("¡Gracias! Tu respuesta se ha registrado.");
           placeholder="Alergias o intolerancias (opcional, máx 500 caracteres)"
           value={form.allergies}
           onChange={handleChange}
-          className="w-full p-2 border rounded"
-          rows={3}
+          className="w-full p-3 border rounded"
+          rows={4}
         />
-        {errors.allergies && <p className="text-red-500 text-sm">{errors.allergies}</p>}
+        {errors.allergies && (
+          <p className="text-red-500 text-sm">{errors.allergies}</p>
+        )}
       </div>
 
-      <button className="bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-600 transition">Enviar</button>
+      <button className="bg-pink-500 text-white px-6 py-3 rounded hover:bg-pink-600 transition text-lg font-semibold">
+        Enviar
+      </button>
     </form>
   );
 }
