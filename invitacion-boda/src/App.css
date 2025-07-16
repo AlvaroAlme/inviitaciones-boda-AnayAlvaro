@@ -1,42 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Mr+De+Haviland&family=Lora:wght@400;700&family=Playfair+Display:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 0) Custom palette as CSS variables */
+:root{
+  --sage:#797D62;
+  --camo:#9B9B7A;
+  --khaki:#d6ce93;
+  --cream:#efebce;
+  --peach:#d8a48f;
+  --mauve:#bb8588;
+}
+
+@layer base {
+  body{@apply bg-[color:var(--cream)];}
+  body::before{content:"";position:fixed;inset:0;background-image:url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgdmlld0JveD0iMCAwIDEyOCAxMjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iNiIgY3k9IjYiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9Ii4xIi8+PC9zdmc+");background-size:64px 64px;opacity:.12;pointer-events:none;z-index:-1}
+}
+
+@layer utilities{
+  .font-script{font-family:'Mr De Haviland',cursive;}
+  .font-serif-title{font-family:'Playfair Display',serif;}
+  .font-serif-body{font-family:'Lora',serif;}
+  /* Color utilities */
+  .text-sage{color:var(--sage);} .bg-sage{background-color:var(--sage);} .hover\:bg-sage-dark:hover{background-color:#EFEBCE;}
+  .bg-khaki{background-color:var(--khaki);} .bg-peach{background-color:var(--peach);} .bg-mauve{background-color:var(--mauve);} .bg-cream{background-color:var(--cream);}  
+}
+
+html{scroll-behavior:smooth;}
+
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }
